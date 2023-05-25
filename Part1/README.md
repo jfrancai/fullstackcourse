@@ -157,7 +157,7 @@ Using the function expression keyword :
 
 ```js
 const average = function(a, b) {
-return (a + b) / 2
+    return (a + b) / 2
 }
 ```
 
@@ -241,3 +241,39 @@ An event handler is a function
 ### Passing state to child components
 
 It is a best practice to wrote small react component and lift up states to the closest common ancestor
+
+## D) A more complex state, debugging React apps
+
+### Spread Syntax
+
+The spread `...` syntax allows an iterable, such as an array or string, to be expanded in places where zero or more arguments are expected.
+
+```js
+const handleLeftClick = () => {
+  const newClicks = { 
+    ...clicks, 
+    left: clicks.left + 1 
+  }
+  setClicks(newClicks)
+}
+
+const handleRightClick = () => {
+  const newClicks = { 
+    ...clicks, 
+    right: clicks.right + 1 
+  }
+  setClicks(newClicks)
+}
+```
+
+It is forbedden in React to mutate state directly
+
+### Rules of Hooks
+
+There are a few limitations and rules we have to follow to ensure that our applications uses hooks-based state functions correctly.
+
+The useState, useEffect function must not be called from inside a loop, a conditional expression, or any place that is not a function deining a component.
+
+### Do not define components within components
+
+The application still appears to work, but don't implement components like this.
