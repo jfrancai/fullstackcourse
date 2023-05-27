@@ -81,3 +81,64 @@ const handleSubmit = (setValue) => {
 ```
 
 This allows you to reuse handle submit to set different state value using different setter.
+
+## C) Getting data from server
+
+You can use JSON server to moke a dev server
+
+```js
+npx json-server --port 3001 --watch db.json
+```
+
+`XMLHttpRequest` (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing.
+
+The use of XHR is no longer recommended, and browsers already widely support the fetch method, which is based on so called promises, instead of the event-driven model used by XHR.
+
+The event loop :
+JavaScript has a runtime model based on an event loop, which is responsible for executing the code, collecting and processing events, and executing queued sub-tasks. This model is quite different from  models in other languages like C and Java.
+
+JavaScript is single threaded.
+
+fetch() global function :
+
+The global `fetch()` method starts the process of fetching a resouce from the network, returning a promise which is fulfilled once the response is available.
+
+We are using axios instead of fetch :
+
+```js
+npm install axios
+```
+
+json-server is installed as dev dependency
+
+```js
+npm install json-server --save-dev
+```
+
+### Axios and promises
+
+A `Promiese` is an object representing the eventual completion or failure of an asynchronous operation.
+
+In other words, a promise is an object that represents an asynchronous operation. A promise can have three distinct states :
+
+1. The promise is pending
+
+2. The promise is fulfilled
+
+3. The promise is rejected 
+
+### Effect-hooks
+
+The Effect Hook lets you perform side efects on functino components. Data fetching, setting up a subscription, and manually changing the DOM in React compoenents are all examples of side effects. 
+
+```js
+const hook = () => {
+    const evenHandler = response => setNotes(response.data)
+    const promise = axios.get('http://localhost:3001/notes')
+    promies.then(evenHandler)
+}
+
+useEffect(hook, [])
+```
+
+The second param of useEffect is used to specify how often the effect is run, If the second parameter is an empty array [], then the effect is only run along with the first render of the component.
