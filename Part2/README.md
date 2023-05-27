@@ -155,3 +155,92 @@ useEffect(hook, [])
 ```
 
 The second param of useEffect is used to specify how often the effect is run, If the second parameter is an empty array [], then the effect is only run along with the first render of the component.
+
+## D) Altering data in server
+
+### REST
+
+In REST terminology, we refer to individual data objects, such as the notes in our application, as resources. Every resource has a unique address associated with it - its URL. According to a general convention used by json-server, we would be able to locate an individual note at the resource URL notes/3, where 3 is the id of the resource. The notes URL, on the other hand, would point to a resource collection containing all the notes.
+
+### Sending data to the Server
+
+```js
+axios
+    .post('url', obj)
+    .then(response => {
+        console.log(response)
+    })
+```
+
+### Updating data in server
+
+```js
+axios.put(url, changedNote).then(response => {
+    console.log(response.data)
+})
+```
+
+### Extracting Communication with the backend into a separate Module
+
+```js
+import axios from 'axios'
+const baseUrl = 'http://localhost:3001/notes'
+
+const getAll = () => {
+  return axios.get(baseUrl)
+}
+
+const create = newObject => {
+  return axios.post(baseUrl, newObject)
+}
+
+const update = (id, newObject) => {
+  return axios.put(`${baseUrl}/${id}`, newObject)
+}
+
+export default { getAll, create, update }
+```
+
+Note: we can return the response.data directly since we only use this property in our code
+
+```js
+const getAll = () => {
+    const request = axios.get(baseUrl)
+    return request.then(response => response.data)
+}
+```
+
+Single-responsibility principle is a computre programming principle that states that "A module should be responsible to one, and only one, actor"
+
+To read again : [You don't know js](https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/async%20%26%20performance/ch3.md)
+
+### Cleaner Syntax for Defining Object Literals
+
+```js
+const name = 'Leevi'
+const age = 0
+
+// Old JS
+const person = {
+    name: name,
+    age: age
+}
+
+// New feature of JS
+const person = { name, age }
+```
+
+### Promises and Errors
+
+The catch() method of `Promise` instances schedules a function to be called  when the promise is rejected. It immediatly returns an equivalent `Promise` object, allowing you to chain calls to other promise methods.
+
+```js
+axios
+  .get('http://example.com/probably_will_fail')
+  .then(response => {
+    console.log('success!')
+  })
+  .catch(error => {
+    console.log('fail')
+  })
+```
