@@ -115,6 +115,19 @@ json-server is installed as dev dependency
 npm install json-server --save-dev
 ```
 
+You can add a script to package.json to run the dev server
+
+```js
+{
+    "scripts": {
+        //...
+        "server": "json-server -p3001 --watch db.json"
+    }
+}
+```
+
+Your data is in db.json
+
 ### Axios and promises
 
 A `Promiese` is an object representing the eventual completion or failure of an asynchronous operation.
@@ -133,9 +146,9 @@ The Effect Hook lets you perform side efects on functino components. Data fetchi
 
 ```js
 const hook = () => {
-    const evenHandler = response => setNotes(response.data)
+    const eventHandler = response => setNotes(response.data)
     const promise = axios.get('http://localhost:3001/notes')
-    promies.then(evenHandler)
+    promise.then(eventHandler)
 }
 
 useEffect(hook, [])
