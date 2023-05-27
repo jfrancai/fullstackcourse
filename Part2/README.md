@@ -244,3 +244,47 @@ axios
     console.log('fail')
   })
 ```
+
+## E) Adding styles to React app
+
+### Adding styles to React app
+
+Note: A CSS preprocessor is a program that lets you generate CSS from the preprocessor's own unique syntax
+
+CSS selectors define the pattern to select elements to which a set of CSS rules are then applied.
+
+In React we have to use the `className` attribute instead of the class attribute.
+
+```js
+<li className='note'></li>
+```
+
+```css
+.note {
+  color: grey;
+  padding-top: 5px;
+  font-size: 15px;
+}
+```
+
+### Inline styles
+
+React also makes it possible to write styles directly in the code as so-called inline styles
+
+In React, inline styles are not specified as a string. Instead they are specified with an object whose key is the camelCased version of the style name, and whose value is style's value, usually a string
+
+```js
+const Footer = () => {
+    const footerStyle = {
+      color: 'green',
+      fontStyle: 'italic',
+      fontSize: 16
+    }
+     return (
+        <div style={footerStyle}>
+        </div>
+     )
+}
+```
+
+
