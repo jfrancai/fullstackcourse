@@ -58,3 +58,29 @@ Then start nodemon with `npm run dev`
 * the URI of one or several resources used a starting points, sometimes called endpoints or entry points
 * the encoding of all possible resource representations (which will include representation of the data and of the hypermedia links for state transitions)
 * the possible state transitions and where they can occur
+
+### Middleware
+
+Middleware are functions that can be used for handling request and response objects.
+
+Middleware is a function that receives three parameters:
+
+```js
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+```
+
+Middleware is taken into use like this:
+
+```js
+app.use(requestLogger)
+```
+
+Middleware can be added before or after our routes, depending on when we want them to be called.
+
+Note: `morgan` provide some nice logs for node servers.
