@@ -103,6 +103,37 @@ const cors = require('cors')
 app.use(cors())
 ```
 
+### Application to the internet
+
+Services to deploy cloud application:
+
+- Fly.io
+- Render
+- Heroku
+
+### Fly.io
+
+First, instlal Fly.io, then run `fly auth login`
+
+Once you are logged in, at the root of your backend app run :
+
+```bash
+fly launch
+```
+
+Set the port accordingly to your app in fly.toml
+
+Then :
+
+```bash
+fly deploy
+fly open
+```
+
+Run `fly deploy` each time you want to update your remote application
+
+You can use `flyctl ping -o <app-name>` to ping the remote machine
+
 ### Frontend production build
 
 Run `npm run build` with create-react-app.
@@ -110,6 +141,35 @@ Run `npm run build` with create-react-app.
 Then it produce a build folder that we can put into the backend folder, it is a minified version of the app
 
 Now, we need to tell the backend where to look for this build folder, using express it can be done using another middleware :
+
 ```js
 app.use(express.static('build'))
+```
+
+Some usefull fly scripts : 
+
+```js
+{
+  "scripts": {
+    // ...
+    "build:ui": "rm -rf build && cd ../part2-notes/ && npm run build && cp -r build ../notes-backend",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",    
+    "logs:prod": "fly logs"
+  }
+}
+```
+
+Note: If you changed the url of the front application to a relative url like `/api/notes` instead of a full adress like `http://localhost:3000/api/notes` and that your backend runs on a different port, you are going to have some connection problems. You can fixe that by using a proxy with create-react-app :
+
+```js
+{
+  "dependencies": {
+    // ...
+  },
+  "scripts": {
+    // ...
+  },
+  "proxy": "http://localhost:3001"
+}
 ```
