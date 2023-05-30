@@ -173,3 +173,69 @@ Note: If you changed the url of the front application to a relative url like `/a
   "proxy": "http://localhost:3001"
 }
 ```
+
+## C) Saving data to MongoDB
+
+You can use MongoDB Atlas to run MongoDB in the cloud
+
+And instead using official MongoDB Node.js driver we are going to use `mongoose` a higher level library.
+
+```js
+npm install mongoose
+```
+
+### Important note to Fly.io
+
+
+
+Because GitHub is not used with Fly.io, the file .env also gets to the Fly.io servers when the app is deployed. Because of this, the env variables defined in the file will be available there.
+
+However, a better option is to prevent .env from being copied to Fly.io by creating in the project root the file .dockerignore, with the following contents
+
+```bash
+.env
+```
+
+and set the env value from the command line with the command:
+
+```bash
+fly secrets set MONGODB_URI='mongodb+srv://fullstack:<password>@cluster0.o1opl.mongodb.net/noteApp?retryWrites=true&w=majority'
+```
+
+### Moving error handling into middleware
+
+Let's move errors into their own handler using `next`
+
+```js
+app.get('/api/notes/:id', (request, response, next) => {  Note.findById(request.params.id)
+    .then(note => {
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
+})
+```
+
+Express error handlers are middleware that are defined with a function that accepts four parameters. Our error handler looks like this:
+
+```js
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+// this has to be the last loaded middleware.
+app.use(errorHandler)
+```
+
+### Validation and ESLint
+
+We can use schema validation before adding data to MongoDB sheet.
