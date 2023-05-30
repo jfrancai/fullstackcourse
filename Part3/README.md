@@ -84,3 +84,32 @@ app.use(requestLogger)
 Middleware can be added before or after our routes, depending on when we want them to be called.
 
 Note: `morgan` provide some nice logs for node servers.
+
+## B) Deploying app to internet
+
+### Same origin policy and CORS
+
+If the ressources fetched by the server came from another URL than the request, browser will have to check the `Access-Control-Allow-Origin` response header.
+
+Let's install the `cors` middleware :
+
+```bash
+npm install cors
+```
+
+```js
+const cors = require('cors')
+
+app.use(cors())
+```
+
+### Frontend production build
+
+Run `npm run build` with create-react-app.
+
+Then it produce a build folder that we can put into the backend folder, it is a minified version of the app
+
+Now, we need to tell the backend where to look for this build folder, using express it can be done using another middleware :
+```js
+app.use(express.static('build'))
+```
