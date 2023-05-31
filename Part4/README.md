@@ -81,3 +81,30 @@ logger.info(`Server running on port ${config.PORT}`)
 ```
 
 Routes have also been moved to their own modules.
+
+### Testing Node application
+
+We are going to use Jest as a testing js library
+
+```bash
+npm install jest --save-dev
+```
+
+We can add the following script to package.json file :
+
+```js
+"test": "jest --verbose"
+```
+
+Then, we have to specify the testing environment : 
+
+```js
+{
+ //...
+ "jest": {
+   "testEnvironment": "node"
+ }
+}
+```
+
+Now we can create a tests directory, under which we are going to add test files.
