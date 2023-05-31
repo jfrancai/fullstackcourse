@@ -88,6 +88,12 @@ const App = () => {
 				setNotification({message: `${newPerson.name}'s number successfully added`, color: 'green'})
 				setTimeout(() => setNotification({message: null, color: null}), 3000)
 			})
+			.catch(error => {
+				const errMsg = error.response.data.error
+				console.log(errMsg)
+				setNotification({message: `${errMsg}`, color: 'red'})
+				setTimeout(() => setNotification({message: null, color: null}), 3000)
+			})
 		setNewName('')
 		setNewNumber('')
 	}

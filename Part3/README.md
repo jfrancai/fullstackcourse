@@ -236,6 +236,16 @@ const errorHandler = (error, request, response, next) => {
 app.use(errorHandler)
 ```
 
-### Validation and ESLint
+## D) Validation and ESlint
+
+### Validation
 
 We can use schema validation before adding data to MongoDB sheet.
+
+### Lint
+
+Generically, lint or a linter is any tool that detects and flags errors in programming languages, including stylistic errors. The term lint-like behavior is sometimes applied to the process of flagging suspicious language usage. Lint-like tools generally perform static analysis of source code.
+
+```js
+npm install eslint --save-dev
+```
