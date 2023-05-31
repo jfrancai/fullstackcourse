@@ -46,6 +46,7 @@ Add it to npm scripts inside package.json
 {
     "scripts": {
         //...
+        "start": "node index.js"
         "dev": "nodemon index.js"
     }
 }
@@ -246,6 +247,10 @@ We can use schema validation before adding data to MongoDB sheet.
 
 Generically, lint or a linter is any tool that detects and flags errors in programming languages, including stylistic errors. The term lint-like behavior is sometimes applied to the process of flagging suspicious language usage. Lint-like tools generally perform static analysis of source code.
 
-```js
+```bash
 npm install eslint --save-dev
+```
+
+```bash
+npx eslint --init
 ```
