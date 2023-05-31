@@ -1,6 +1,14 @@
 
 # Part4
 
+Note:
+
+```bash
+npm install dotenv
+```
+
+Then you can use it with, `require('dotenv').config()` and you can access your env variable via `process.env.MY_VAR_HERE`
+
 ## A) Structure of backend apllication, introduction to testing
 
 Best practice
