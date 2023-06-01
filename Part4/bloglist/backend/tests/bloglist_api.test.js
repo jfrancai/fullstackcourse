@@ -1,35 +1,20 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+
 const app = require('../app')
-const Blog = require('../models/bloglist')
+
 const api = supertest(app)
 
-const initialBlogs = [
-	{
-		_id: '5a422aa71b54a676234d17f8',
-		title: 'Go To Statement Considered Harmful',
-		author: 'Edsger W. Dijkstra',
-		url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-		likes: 5,
-		__v: 0
-	},
-	{
-		_id: '5a422aa71b54a676234d17f9',
-		title: 'tata',
-		author: 'Edsger W. Dijkstra',
-		url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-		likes: 1,
-		__v: 0
-	}
-]
+const helper = require('./test_helper')
+const Blog = require('../models/bloglist')
 
 beforeEach(async () => {
 	await Blog.deleteMany({})
 
-	initialBlogs.forEach(async (blog) => {
+	for (let blog of helper.initialBlogs) {
 		let blogObj = new Blog(blog)
 		await blogObj.save()
-	})
+	}
 })
 
 test('blogs are retruned as json', async () => {
@@ -37,12 +22,11 @@ test('blogs are retruned as json', async () => {
 		.get('/api/blogs')
 		.expect(200)
 		.expect('Content-Type', /application\/json/)
-}, 100000)
+})
 
 test('all blogs are returned', async () => {
 	const response = await api.get('/api/blogs')
-
-	expect(response.body).toHaveLength(initialBlogs.length)
+	expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
 test('Check blog title of a certain blog post', async () => {
@@ -58,6 +42,103 @@ test('id exist', async () => {
 	response.body.map(blog => expect(blog.id).toBeDefined())
 })
 
+test('a valid blog can be added', async () => {
+	const newBlog = {
+		title: 'titi at the beach',
+		author: 'titi',
+		url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+		likes: 7,
+	}
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	const response = await api.get('/api/blogs')
+
+	const titles = response.body.map(r => r.title)
+	expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+	expect(titles).toContain('titi at the beach')
+})
+
+test('likes set to 0 if missing in post request', async () => {
+	const newBlog = {
+		title: 'titi at the beach',
+		author: 'titi',
+		url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html'
+	}
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	const response = await api.get('/api/blogs')
+	const blog = response.body.find(r => r.author === 'titi')
+
+	expect(blog.likes).toBe(0)
+})
+
+test('blog with title or url missing are not accepted', async () => {
+	const missingTitleBlog = {
+		author: 'titi',
+		url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html'
+	}
+
+	const missingUrlBlog = {
+		title: 'titi at the beach',
+		author: 'titi',
+	}
+
+	await api
+		.post('/api/blogs')
+		.send(missingTitleBlog)
+		.expect(400)
+
+	await api
+		.post('/api/blogs')
+		.send(missingUrlBlog)
+		.expect(400)
+
+	const response = await api.get('/api/blogs')
+	expect(response.body).toHaveLength(helper.initialBlogs.length)
+})
+
+test('deletion of a blog', async () => {
+	let response = await api.get('/api/blogs')
+	const blogsAtStart = response.body
+	const blogToDelete = blogsAtStart[0]
+
+	await api
+		.delete(`/api/blogs/${blogToDelete.id}`)
+		.expect(204)
+
+	response = await api.get('/api/blogs')
+
+	const blogsAtEnd = response.body
+	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+
+	const titles = blogsAtEnd.map(r => r.titles)
+	expect(titles).not.toContain(blogToDelete.title)
+})
+
 afterAll(async () => {
 	await mongoose.connection.close()
+})
+
+test('updating a note', async () => {
+	let response = await api.get('/api/blogs')
+	const blogToUpdate = response.body[0]
+	console.log(blogToUpdate)
+
+	await api
+		.put(`/api/blogs/${blogToUpdate.id}`)
+		.send()	
+		.expect(200)
+
+	response = await api.get('/api/blogs')
+	expect(response.body[0].likes).toBe(blogToUpdate.likes + 1)
 })
