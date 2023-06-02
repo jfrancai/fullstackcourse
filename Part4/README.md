@@ -169,3 +169,26 @@ Once all the tests have finished  running  we have to close the database  connec
 
 We can use `beforeEach` function to setup the database for example :
 
+## C) User administration
+
+Create a userSchema with mongoose, stores the hash of the user user password, never store clear password. Also a good practice not to relveal this hash.
+
+Since MongoDB is not a relational database we also have to attached the ressources id to each user in order to 'map' the content.
+
+Let's install bcrypt for generating the password hashes:
+
+```bash
+npm install bcrypt
+```
+
+then we can create a route for creating new users in our application
+
+### Creating users
+
+By default mongoose does not provide a way to check the uniqueness of a data
+
+We can install the following package for that :
+
+```bash
+npm install mongoose-unique-validator
+```
