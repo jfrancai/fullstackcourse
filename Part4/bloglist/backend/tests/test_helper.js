@@ -1,4 +1,3 @@
-const Blog = require('../models/bloglist')
 const User = require('../models/user')
 
 const usersInDb = async () => {

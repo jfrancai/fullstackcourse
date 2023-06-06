@@ -4,7 +4,33 @@ const bcrypt = require('bcrypt')
 
 const app = require('../app')
 
-const api = supertest(app)
+const getRootToken = async () => {
+	const response = await supertest(app)
+		.post('/api/login')
+		.send({
+			username: 'root',
+			password: 'sekret'
+		})
+		.expect(200)
+
+	return response.body.token
+}
+
+let token = undefined
+
+const hook = (method = 'post') => (args, disableAuth = false) => {
+	if (disableAuth) {
+		return supertest(app)[method](args)
+	}
+	return supertest(app)[method](args).auth(token, { type: 'bearer' })
+}
+
+const api = {
+	post: hook('post'),
+	get: hook('get'),
+	put: hook('put'),
+	delete: hook('delete'),
+};
 
 const helper = require('./test_helper')
 const Blog = require('../models/bloglist')
@@ -19,6 +45,8 @@ describe('basic blogs tests', () => {
 		const user = new User({ username: 'root', passwordHash })
 		
 		await user.save()
+
+		token = await getRootToken()
 
 		for (let blog of helper.initialBlogs) {
 			let blogObj = new Blog(blog)
@@ -220,6 +248,23 @@ describe('when there is initially one user in db', () => {
 
 		const usernames = usersAtEnd.map(u => u.username)
 		expect(usernames).not.toContain(newUser.username)
+	})
+
+	test('Adding blog without auth token', async () => {
+		const newBlog = {
+			title: 'titi at the beach',
+			author: 'titi',
+			url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+			likes: 7
+		}
+
+		const result = await api
+			.post('/api/blogs', true)
+			.send(newBlog)
+			.expect(401)
+			.expect('Content-Type', /application\/json/)
+
+		expect(result.body.error).toContain('invalid token')
 	})
 })
 
