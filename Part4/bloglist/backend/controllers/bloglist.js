@@ -1,6 +1,8 @@
 const blogRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const Blog = require('../models/bloglist')
+const middleware = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
 	const blogs = await Blog
@@ -9,28 +11,32 @@ blogRouter.get('/', async (request, response) => {
 	response.json(blogs)
 })
 
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', middleware.userExtractor, async (request, response) => {
 	const body = request.body
-
-	const users = await User.find({})
+	const user = request.user
 
 	const blog = new Blog({
 		title: body.title,
 		author: body.author,
 		url: body.url,
 		likes: body.likes || 0,
-		user: users[0].id,
+		user: user._id,
 	})
 
 	const savedBlog = await blog.save()
 
-	users[0].blogs = users[0].blogs.concat(savedBlog._id)
-	await users[0].save()
+	user.blogs = user.blogs.concat(savedBlog._id)
+	await user.save()
 
 	response.status(201).json(savedBlog)
 })
 
-blogRouter.delete('/:id', async (request, response) => {
+blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
+	const user = request.user
+
+	user.blogs = user.blogs.filter(blog => blog.toString() !== request.params.id)
+	user.save()
+
 	await Blog.findByIdAndDelete(request.params.id)
 	response.status(204).end()
 })

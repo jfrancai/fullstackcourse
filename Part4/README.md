@@ -1,4 +1,3 @@
-
 # Part4
 
 Note:
@@ -191,4 +190,12 @@ We can install the following package for that :
 
 ```bash
 npm install mongoose-unique-validator
+```
+
+## D) Token authentication
+
+Let's install the `jsonwebtoken` package :
+
+```bash
+npm install jsonwebtoken
 ```
