@@ -4,19 +4,16 @@ import { LoginForm, BlogForm } from './components/Form'
 import Notification from './components/Notification'
 import Togglable from './components/Toggable'
 import blogService from './services/blogs'
-import loginService from './services/login'
 
 const App = () => {
 	const [blogs, setBlogs] = useState([])
-	const [username, setUsername] = useState('')
-	const [password, setPassword] = useState('')
 	const [user, setUser] = useState(null)
 	const [notification, setNotification] = useState({ message: null, color: null, })
 
 	useEffect(() => {
 		blogService.getAll().then(blogs =>
 			setBlogs( blogs )
-		)  
+		)
 	}, [])
 
 	useEffect(() => {
@@ -29,30 +26,10 @@ const App = () => {
 	}, [])
 
 	const notify = (messageToPrint, messageColor) => {
-		setNotification({message: `${messageToPrint}`, color: `${messageColor}`})
-		setTimeout(() => setNotification({message: null, color: null}), 3000)
+		setNotification({ message: `${ messageToPrint }`, color: `${ messageColor }` })
+		setTimeout(() => setNotification({ message: null, color: null }), 3000)
 	}
 
-	const handleLogin = async (event) => {
-		event.preventDefault()
-
-		try {
-			const user = await loginService.login({
-				username, password
-			})
-
-			window.localStorage.setItem(
-				'loggedBlogappUser', JSON.stringify(user)
-			)
-			blogService.setToken(user.token)
-			setUser(user)
-			setUsername('')
-			setPassword('')
-		} catch (exception) {
-			const error = exception.response.data.error
-			notify(error, 'red')
-		}
-	}
 
 	const handleLogout = () => {
 		window.localStorage.removeItem('loggedBlogappUser')
@@ -60,10 +37,9 @@ const App = () => {
 	}
 
 	const loginForm = () => < LoginForm
-			handleSubmit={handleLogin}
-			handleUsernameChange={({ target }) => setUsername(target.value)}
-			handlePasswordChange={({ target }) => setPassword(target.value)}
-		/>
+		setUser={ setUser }
+		notify={notify}
+	/>
 
 	const blogsList = () => {
 		return (
@@ -75,17 +51,17 @@ const App = () => {
 						updateBlogs={setBlogs}
 						blogs={blogs}
 						handleLogout={handleLogout}
-						notify={notify}		
+						notify={notify}
 					/>
 				</Togglable>
 				<br/>
 				<div>
-					{
-						blogs.sort((a, b) => a.likes < b.likes).map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />)
-					}
+					{blogs
+						.sort((a, b) => a.likes < b.likes)
+						.map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />) }
 				</div>
 			</>
-	)}
+		)}
 
 	return (
 		<div>
