@@ -39,6 +39,7 @@ const LoginForm = ({
 				<div>
 					username
 					<input
+						id="username"
 						type='text'
 						value={username}
 						name='Username'
@@ -48,13 +49,14 @@ const LoginForm = ({
 				<div>
 					password
 					<input
+						id='password'
 						type='password'
 						value={password}
 						name='Password'
 						onChange={({ target }) => setPassword(target.value)}
 					/>
 				</div>
-				<button type='submit'>login</button>
+				<button id='login-button' type='submig'>login</button>
 			</form>
 		</div>
 	)}
@@ -105,6 +107,7 @@ const BlogForm = ({
 				<div>
 					title
 					<input
+						id='title'
 						type='text'
 						value={title}
 						name='Title'
@@ -114,6 +117,7 @@ const BlogForm = ({
 				<div>
 					author
 					<input
+						id='author'
 						type='text'
 						value={author}
 						name='Title'
@@ -123,13 +127,14 @@ const BlogForm = ({
 				<div>
 					url
 					<input
+						id='url'
 						type='text'
 						value={url}
 						name='Title'
 						onChange={({ target }) => setUrl(target.value)}
 					/>
 				</div>
-				<button type='submit'>create</button>
+				<button id='create-blog' type='submit'>create</button>
 			</form>
 		</div>
 	)}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Blog } from './components/Blog'
+import Blog from './components/Blog'
 import { LoginForm, BlogForm } from './components/Form'
 import Notification from './components/Notification'
 import Togglable from './components/Toggable'
@@ -41,6 +41,19 @@ const App = () => {
 		notify={notify}
 	/>
 
+	const likeBlog = blog => async () => {
+		const updatedBlog = await blogService.update(blog.id)
+		const blogsCopy = [ ...blogs ]
+		const index = blogsCopy.findIndex(b => b.id === updatedBlog.id)
+		blogsCopy[index] = updatedBlog
+		setBlogs(blogsCopy)
+	}
+
+	const removeBlog = blog => async () => {
+		await blogService.remove(blog.id)
+		setBlogs(blogs.filter(b => b.id !== blog.id))
+	}
+
 	const blogsList = () => {
 		return (
 			<>
@@ -58,7 +71,7 @@ const App = () => {
 				<div>
 					{blogs
 						.sort((a, b) => a.likes < b.likes)
-						.map(blog => <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />) }
+						.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} />) }
 				</div>
 			</>
 		)}
