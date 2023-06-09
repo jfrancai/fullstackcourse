@@ -133,3 +133,5 @@ describe('noteReducer', () => {
   })
 })
 ```
+
+### Controlled vs un Uncontrolled React component
