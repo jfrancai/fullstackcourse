@@ -145,3 +145,6 @@ npm install @reduxjs/toolkit
 ```
 
 This package helps with the creation of complex redux store that can handle multiple reducers.
+
+
+## C) Communicating with server in a redux application
