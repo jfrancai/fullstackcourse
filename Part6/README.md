@@ -1,5 +1,4 @@
-
-# Part4
+# Part6
 
 So far, we have placed the application's state and state logic directly inside React components. When applications grow larger, state management should be moved outside React components. In this part, we will introduce the Redux library, which is currently the most popular solution for managing the state of React applications.
 
@@ -135,3 +134,14 @@ describe('noteReducer', () => {
 ```
 
 ### Controlled vs un Uncontrolled React component
+
+
+## B) Many reducers
+
+### Redux Toolkit
+
+```bash
+npm install @reduxjs/toolkit
+```
+
+This package helps with the creation of complex redux store that can handle multiple reducers.
