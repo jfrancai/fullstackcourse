@@ -146,5 +146,31 @@ npm install @reduxjs/toolkit
 
 This package helps with the creation of complex redux store that can handle multiple reducers.
 
-
 ## C) Communicating with server in a redux application
+
+We can use JSONweb server to mock a db and we are using axios to communicate the server.
+
+### Asynchronous actions and Redux thunk
+
+It is a good practice to abstract communication with the server away from the ui component. In this implementation, both components would dispatch an action without the need to know about the communication between the server taht happens begind the scenes. Theses kinds of async actions can be implemented usind the Redux Thunk livrary. The use of the livrary doesn't need any additional configuration or even installation when the Redux store is created using the Reux Toolkit's configreStore function.
+
+## D) React Query, useReducer and the context
+
+### Manging data on the server with the React Query library
+
+```bash
+npm install react-query
+```
+
+### Which state management solution to choose?
+
+In capters 1-5, all state management of the application was done using React's hook useState. Asynchronous calls to the backend required the use of the useEffect hook in some situations. In principle, nothing else is needed.
+A subtle problem with a solution based on a state created with the useState hook is that if some part of the application's state is needed by multiple components of the application, the state and the functions for manipulating it must be passed via props to all components that handle the state. Sometimes props need to be passed through multiple components, and the components along the way may not even be interested in the state in any way. This somewhat unpleasant phenomenon is called prop drilling.
+
+Over the years, several alternative solutions have been developed for state management of React applications, which can be used to ease problematic situations (e.g. prop drilling). However, no solution has been "final", all have their own pros and cons, and new solutions are being developed all the time.
+
+The situation may confuse a beginner and even an experienced web developer. Which solution should be used?
+
+For a simple application, useState is certainly a good starting point. If the application is communicating with the server, the communication can be handled in the same way as in chapters 1-5, using the state of the application itself. Recently, however, it has become more common to move the communication and associated state management at least partially under the control of React Query (or some other similar library). If you are concerned about useState and the prop drilling it entails, using context may be a good option. There are also situations where it may make sense to handle some of the state with useState and some with contexts.
+
+The most comprehensive and robust state management solution is Redux, which is a way to implement the so-called Flux architecture. Redux is slightly older than the solutions presented in this section. The rigidity of Redux has been the motivation for many new state management solutions, such as React's useReducer. Some of the criticisms of Redux's rigidity have already become obsolete thanks to the Redux Toolkit.
