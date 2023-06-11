@@ -6,6 +6,12 @@ We can init a new node project using npm package manager by running `npm init`, 
 
 ### Simple web server
 
+To start a new npm project
+
+```bash
+npm init
+```
+
 Here we are using `http` Node js package. It's like vanilla Node.js
 ```js
 const http = require('http')
