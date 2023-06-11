@@ -49,3 +49,53 @@ const App = () => {
 ```
 
 ## B) Custom hooks
+
+Example of built in hooks:
+
+- useEffect
+- useState
+
+Hook rules:
+
+Don't call Hooks from regular JS functions. Instead, you can:
+
+* Call Hooks from React function components.
+
+* Call Hooks from custom Hooks
+
+Note: create-react-app has the readily-configured rule eslint-plugin-react-hooks that complains if hooks are used in an illegal manner
+
+### Custom hooks
+
+Custom hooks is to facilitate the reuse of the logic used in components.
+
+```js
+const useCounter = () => {
+  const [value, setValue] = useState(0)
+
+  const increase = () => {
+    setValue(value + 1)
+  }
+
+  const decrease = () => {
+    setValue(value - 1)
+  }
+
+  const zero = () => {
+    setValue(0)
+  }
+
+  return {
+    value, 
+    increase,
+    decrease,
+    zero
+  }
+}
+```
+
+Ressources about hooks:
+
+* [Awesome React Hooks Resources](https://github.com/rehooks/awesome-react-hooks)
+* [Easy to understand React hook recipes by Gabe Ragland](https://usehooks.com/)
+* [Why do React hooks Rely on Call Order?](https://overreacted.io/why-do-hooks-rely-on-call-order/)
