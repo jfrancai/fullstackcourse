@@ -115,3 +115,267 @@ and many mores...
 ## D) Webpack
 
 ### Bundling
+
+It means to put all of the code into one single page.
+
+First we define package.json :
+```json
+{
+  "name": "webpack-part7",
+  "version": "0.0.1",
+  "description": "practising webpack",
+  "scripts": {},
+  "license": "MIT"
+}
+```
+
+Then we can install webpack :
+
+```bash
+npm install --save-dev webpack webpack-cli
+```
+
+We can now configure webpack in `webpack.config.js`
+
+```js
+const path = require('path')
+
+const config = () => {
+  return {
+    entry: './src/index.js',
+    output: {
+      path: path.resolve(__dirname, 'build'),
+      filename: 'main.js'
+    }
+  }
+}
+
+module.exports = config
+```
+
+Creation of a build script :
+
+```json
+"script": {
+    "build": "webpack --mode=development"
+}
+```
+
+Now we can write our code in src/index.js 
+
+```js
+console.log('hello')
+```
+
+and run `npm run build`
+
+### Bundling React
+
+```bash
+npm install react react-dom
+```
+
+Then we can setup React in our application as usual
+
+And we still the build/index.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>React App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript" src="./main.js"></script>
+  </body>
+</html>
+```
+
+If we try to build it will fail, we need loaders.
+
+### Loaders
+
+The error message from webpack states that we may need an appropriate loader to bundle the App.js file correctly. By default, webpack only knows how to deal with plain JavaScript. Although we may have become unaware of it, we are using JSX for rendering our views in React.
+
+webpack.config.js
+
+```js
+const path = require('path')
+
+const config = () => {
+  return {
+    entry: './src/index.js',
+    output: {
+      path: path.resolve(__dirname, 'build'),
+      filename: 'main.js'
+    },
+
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-react'],
+          },
+        },
+      ],
+    },
+  }
+}
+
+module.exports = config
+```
+
+Babel loader installation
+
+```bash
+npm install @babel/core babel-loader @babel/preset-react --save-dev
+```
+
+Other deps for es6 import module
+
+```bash
+npm install core-js regenerator-runtime
+```
+
+and import them into index.js
+
+```js
+import 'core-js/stable/index.js'
+import 'regenerator-runtime/runtime.js'
+```
+
+### Transpilers
+
+Adding `'@babel/presset-env'` to webpack config. It transpile ES6 code to ES5
+
+```bash
+npm install @babel/preset-env --save-dev
+```
+
+```js
+{
+  test: /\.js$/,
+  loader: 'babel-loader',
+  options: {
+
+    presets: ['@babel/preset-env', '@babel/preset-react']
+  }
+}
+```
+
+### CSS
+
+```bash
+npm install style-loader css-loader --save-dev
+```
+
+```js
+{
+  rules: [
+    {
+      test: /\.js$/,
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-react', '@babel/preset-env'],
+      },
+    },
+
+    {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader'],
+    },
+  ];
+}
+```
+
+### Webpack dev-server
+
+```bash
+npm install --save-dev webpack-dev-server
+```
+
+```json
+{
+  // ...
+  "scripts": {
+    "build": "webpack --mode=development",
+
+    "start": "webpack serve --mode=development"
+  },
+  // ...
+}
+```
+
+```js
+const config = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'build'),
+    filename: 'main.js',
+  },
+
+  devServer: {
+    static: path.resolve(__dirname, 'build'),
+    compress: true,
+    port: 3000,
+  },
+  // ...
+};
+```
+
+### Source maps
+
+webpack devtool to match errro lines
+
+```js
+const config = {
+  entry: './src/index.js',
+  output: {
+    // ...
+  },
+  devServer: {
+    // ...
+  },
+
+  devtool: 'source-map',
+  // ..
+};
+```
+
+### Minifying the code
+
+Leading tool : UglifyJS
+
+Since webpack v4 just set mode=production to use it
+
+```json
+{
+  "name": "webpack-part7",
+  "version": "0.0.1",
+  "description": "practising webpack",
+  "scripts": {
+
+    "build": "webpack --mode=production",
+    "start": "webpack serve --mode=development"
+  },
+  "license": "MIT",
+  "dependencies": {
+    // ...
+  },
+  "devDependencies": {
+    // ...
+  }
+}
+```
+
+### Developmnt and production configuration
+
+We can add some custom webpack plugin that acts like preprocessing to define runtime environment variable
+
+### Polyfill
+
+It gives your application the expected functionality of your runtime. Like `find` method that is not present in Internet Explorer browser...
