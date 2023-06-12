@@ -99,3 +99,19 @@ Ressources about hooks:
 * [Awesome React Hooks Resources](https://github.com/rehooks/awesome-react-hooks)
 * [Easy to understand React hook recipes by Gabe Ragland](https://usehooks.com/)
 * [Why do React hooks Rely on Call Order?](https://overreacted.io/why-do-hooks-rely-on-call-order/)
+
+## C) More about styles
+
+## Ready made UI libraries
+
+- Bootstrap (reactstrap / react-boostrap)
+- Material UI
+- Semantic UI React (officail React integration library)
+
+and many mores...
+
+## Styled components
+
+## D) Webpack
+
+### Bundling
