@@ -190,9 +190,213 @@ npm install @reduxjs/toolkit
 
 This package helps with the creation of complex redux store that can handle multiple reducers.
 
+### Combined reducers
+
+We can create the actual reducer for our application by combining the two existing reducers with the `combineReducers` functions
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+import { createStore, combineReducers } from 'redux'
+import { Provider } from 'react-redux' 
+import App from './App'
+
+import noteReducer from './reducers/noteReducer'
+
+import filterReducer from './reducers/filterReducer'
+
+
+const reducer = combineReducers({
+  notes: noteReducer,
+  filter: filterReducer
+})
+
+
+const store = createStore(reducer)
+
+console.log(store.getState())
+
+/*
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+)*/
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <div />
+  </Provider>
+)
+```
+
+Previously the selector function returned the whole state of the store:
+
+```js
+const notes = useSelector(state => state)
+```
+
+And now it returns only its field notes
+
+```js
+const notes = useSelector(state => state.notes)
+```
+
+### Redux Toolkit
+
+```bash
+npm install @reduxjs/toolkit
+```
+
+Actually what we've seen before it quite cumbursome at some point. So, we can use the Redux toolkit to simplify many part of the Redux interaction
+
+For example we can now configure the store with configureStore funciton only and we do not need the combineReducers anymore :
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+
+import { configureStore } from '@reduxjs/toolkit'
+import App from './App'
+
+import noteReducer from './reducers/noteReducer'
+import filterReducer from './reducers/filterReducer'
+
+
+const store = configureStore({
+  reducer: {
+    notes: noteReducer,
+    filter: filterReducer
+  }
+})
+
+console.log(store.getState())
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+```
+
+We can also refactor the Reducers, which brings forth the benefits of the Redux Toolkit.
+We can easily create reducer and related actoin creators using the `createSlice` function 
+
+```js
+import { createSlice } from '@reduxjs/toolkit'
+
+const initialState = [
+  {
+    content: 'reducer defines how redux store works',
+    important: true,
+    id: 1,
+  },
+  {
+    content: 'state of store can contain any data',
+    important: false,
+    id: 2,
+  },
+]
+
+const generateId = () =>
+  Number((Math.random() * 1000000).toFixed(0))
+
+
+const noteSlice = createSlice({
+  name: 'notes',
+  initialState,
+  reducers: {
+    createNote(state, action) {
+      const content = action.payload
+      state.push({
+        content,
+        important: false,
+        id: generateId(),
+      })
+    },
+    toggleImportanceOf(state, action) {
+      const id = action.payload
+      const noteToChange = state.find(n => n.id === id)
+      const changedNote = { 
+        ...noteToChange, 
+        important: !noteToChange.important 
+      }
+      return state.map(note =>
+        note.id !== id ? note : changedNote 
+      )     
+    }
+  },
+})
+```
+
+If you noticed we've used `push` method in the createNote reducers. This should be forbiden since we must not mutate state of the variable but Redux Toolkit utilizes the Immer library with reducers created by createSlice function, which make it possible to mutate the state argument inside the reducer.
+
+### Redux Toolkit and console.log
+
+Now if you try to print out the state of a reducer you will end up with useless debug console.log in the console. This is due to Immer
+
+Use this instead :
+
+```js
+console.log(JSON.parse(JSON.stringify(state)))
+```
+
+Note: With Typescript we can achieve immutability without the need of Immer library since it is a typed language
+
 ## C) Communicating with server in a redux application
 
 We can use JSONweb server to mock a db and we are using axios to communicate the server.
+
+### Asynchronous actions and Redux thunk
+
+Redux Thung is built in Redux Toolkit
+
+```js
+// ...
+
+import noteService from '../services/notes'
+
+const noteSlice = createSlice(/* ... */)
+
+export const { createNote, toggleImportanceOf, setNotes, appendNote } = noteSlice.actions
+
+
+export const initializeNotes = () => {
+  return async dispatch => {
+    const notes = await noteService.getAll()
+    dispatch(setNotes(notes))
+  }
+}
+
+export default noteSlice.reducer
+```
+
+```js
+// ...
+
+import { initializeNotes } from './reducers/noteReducer'
+
+const App = () => {
+  const dispatch = useDispatch()
+
+
+  useEffect(() => {
+    dispatch(initializeNotes()) 
+  }, [dispatch]) 
+
+  return (
+    <div>
+      <NewNote />
+      <VisibilityFilter />
+      <Notes />
+    </div>
+  )
+}
+```
+
+It allows to further detach the frontend logic from the Redux store management
 
 ### Asynchronous actions and Redux thunk
 
