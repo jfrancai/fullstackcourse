@@ -2,6 +2,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
 import PropTypes from 'prop-types'
+import { createBlog } from '../reducers/blogReducer'
 import { notify } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
 
@@ -67,8 +68,6 @@ LoginForm.propTypes = {
 }
 
 const BlogForm = ({
-	updateBlogs,
-	blogs,
 	handleLogout
 }) => {
 	const [title, setTitle] = useState('')
@@ -76,29 +75,17 @@ const BlogForm = ({
 	const [url, setUrl] = useState('')
 	const dispatch = useDispatch()
 
+	const clearFields = () => {
+		setTitle('')
+		setAuthor('')
+		setUrl('')
+	}
+
 	const addBlog = async (event) => {
 		event.preventDefault()
 
-		try {
-			const createdBlog = await blogService.create({
-				title: title,
-				author: author,
-				url: url
-			})
-
-			updateBlogs(blogs.concat(createdBlog))
-			setTitle('')
-			setAuthor('')
-			setUrl('')
-			const msg = `a new blog ${createdBlog.title} by ${createdBlog.author} added`
-			dispatch(notify(msg, 'green'))
-		} catch (exception) {
-			const error = exception.response.data.error
-			dispatch(notify(error, 'red'))
-			if (error === 'token expired') {
-				handleLogout()
-			}
-		}
+		const blog = { title, author, url }
+		dispatch(createBlog(blog, handleLogout, clearFields))
 	}
 
 	return (
