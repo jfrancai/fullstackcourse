@@ -6,31 +6,31 @@ const blogSlice = createSlice({
 	name: 'blog',
 	initialState: [],
 	reducers: {
-		append(state, action) {
+		appendBlog(state, action) {
 			state.push(action.payload)
 			return state
 		},
-		set(state, action) {
+		setBlogs(state, action) {
 			state = action.payload
 			return action.payload
 		},
-		del(state, action) {
+		delBlog(state, action) {
 			return state.filter(b => b.id !== action.payload)
 		},
-		like(state, action) {
+		likeBlog(state, action) {
 			state.find(b => b.id === action.payload).likes += 1
 			return  state
 		}
 	}
 })
 
-export const { set, append, del, like } = blogSlice.actions
+export const { setBlogs, appendBlog, delBlog, likeBlog } = blogSlice.actions
 export default blogSlice.reducer
 
 export const initBlogs = () => {
 	return async dispatch => {
 		const blogs = await blogServices.getAll()
-		dispatch(set(blogs))
+		dispatch(setBlogs(blogs))
 	}
 }
 
@@ -38,7 +38,7 @@ export const createBlog = (blog, handleLogout, clearFields) => {
 	return async dispatch => {
 		try {
 			const createdBlog = await blogServices.create(blog)
-			dispatch(append(createdBlog))
+			dispatch(appendBlog(createdBlog))
 			dispatch(notify(
 				`a new blog ${createdBlog.title} by ${createdBlog.author} added`
 				, 'green'
@@ -58,18 +58,18 @@ export const removeBlog = (id) => {
 	return async dispatch => {
 		try {
 			await blogServices.remove(id)
-			dispatch(del(id))
+			dispatch(delBlog(id))
 		} catch (exception) {
 			console.log(exception.response.data.error)
 		}
 	}
 }
 
-export const likeBlog = (id) => {
+export const like = (id) => {
 	return async dispatch => {
 		try {
 			await blogServices.update(id)
-			dispatch(like(id))
+			dispatch(likeBlog(id))
 		} catch (exception) {
 			console.log(exception.response.data.error)
 		}

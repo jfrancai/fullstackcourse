@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { removeBlog, likeBlog } from '../reducers/blogReducer'
+import { removeBlog, like } from '../reducers/blogReducer'
 
 const Blog = ({ blog }) => {
 	const blogStyle ={
@@ -24,7 +24,7 @@ const Blog = ({ blog }) => {
 			{blog.title} <button onClick={toggleVisibilty}>{visible ? 'hide' : 'view'}</button>
 			<div style={showWhenVisible} className='togglableContent'>
 				Link: <a href={blog.url}>{blog.url}</a><br/>
-				Likes: {blog.likes}<button onClick={() => dispatch(likeBlog(blog.id))}>like</button><br/>
+				Likes: {blog.likes}<button onClick={() => dispatch(like(blog.id))}>like</button><br/>
 				Author: {blog.author}<br/>
 				<button onClick={() => dispatch(removeBlog(blog.id))}>remove</button>
 			</div>
