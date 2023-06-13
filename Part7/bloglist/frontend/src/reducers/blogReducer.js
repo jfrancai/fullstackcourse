@@ -6,24 +6,31 @@ const blogSlice = createSlice({
 	name: 'blog',
 	initialState: [],
 	reducers: {
-		appendBlog(state, action) {
+		append(state, action) {
 			state.push(action.payload)
 			return state
 		},
-		setBlogs(state, action) {
+		set(state, action) {
 			state = action.payload
-			return state
+			return action.payload
+		},
+		del(state, action) {
+			return state.filter(b => b.id !== action.payload)
+		},
+		like(state, action) {
+			state.find(b => b.id === action.payload).likes += 1
+			return  state
 		}
 	}
 })
 
-export const { setBlogs, appendBlog } = blogSlice.actions
+export const { set, append, del, like } = blogSlice.actions
 export default blogSlice.reducer
 
 export const initBlogs = () => {
 	return async dispatch => {
 		const blogs = await blogServices.getAll()
-		dispatch(setBlogs(blogs))
+		dispatch(set(blogs))
 	}
 }
 
@@ -31,7 +38,7 @@ export const createBlog = (blog, handleLogout, clearFields) => {
 	return async dispatch => {
 		try {
 			const createdBlog = await blogServices.create(blog)
-			dispatch(appendBlog(createdBlog))
+			dispatch(append(createdBlog))
 			dispatch(notify(
 				`a new blog ${createdBlog.title} by ${createdBlog.author} added`
 				, 'green'
@@ -43,6 +50,28 @@ export const createBlog = (blog, handleLogout, clearFields) => {
 			if (error === 'token expired') {
 				handleLogout()
 			}
+		}
+	}
+}
+
+export const removeBlog = (id) => {
+	return async dispatch => {
+		try {
+			await blogServices.remove(id)
+			dispatch(del(id))
+		} catch (exception) {
+			console.log(exception.response.data.error)
+		}
+	}
+}
+
+export const likeBlog = (id) => {
+	return async dispatch => {
+		try {
+			await blogServices.update(id)
+			dispatch(like(id))
+		} catch (exception) {
+			console.log(exception.response.data.error)
 		}
 	}
 }

@@ -4,7 +4,7 @@ import Blog from './components/Blog'
 import { LoginForm, BlogForm } from './components/Form'
 import Notification from './components/Notification'
 import Togglable from './components/Toggable'
-import { initBlogs, setBlogs } from './reducers/blogReducer'
+import { initBlogs } from './reducers/blogReducer'
 import blogService from './services/blogs'
 
 
@@ -15,6 +15,7 @@ const App = () => {
 
 	useEffect(() => {
 		dispatch(initBlogs())
+		console.log('hello')
 	}, [dispatch])
 
 	useEffect(() => {
@@ -33,19 +34,6 @@ const App = () => {
 
 	const loginForm = () => < LoginForm setUser={ setUser } />
 
-	const likeBlog = blog => async () => {
-		const updatedBlog = await blogService.update(blog.id)
-		const blogsCopy = [ ...blogs ]
-		const index = blogsCopy.findIndex(b => b.id === updatedBlog.id)
-		blogsCopy[index] = updatedBlog
-		dispatch(setBlogs(blogsCopy))
-	}
-
-	const removeBlog = blog => async () => {
-		await blogService.remove(blog.id)
-		dispatch(setBlogs(blogs.filter(b => b.id !== blog.id)))
-	}
-
 	const blogsList = () => {
 		const sortedBlogs = [...blogs].sort((a, b) => a.likes < b.likes)
 		return (
@@ -60,8 +48,7 @@ const App = () => {
 				</Togglable>
 				<br/>
 				<div>
-					{sortedBlogs
-						.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} />) }
+					{sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} />) }
 				</div>
 			</>
 		)}
