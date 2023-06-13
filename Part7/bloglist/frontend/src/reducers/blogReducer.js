@@ -12,7 +12,7 @@ const blogSlice = createSlice({
 		},
 		setBlogs(state, action) {
 			state = action.payload
-			return action.payload
+			return state
 		},
 		delBlog(state, action) {
 			return state.filter(b => b.id !== action.payload)
