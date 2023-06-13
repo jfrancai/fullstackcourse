@@ -28,7 +28,7 @@ const LoginForm = ({
 			setPassword('')
 		} catch (exception) {
 			const error = exception.response.data.error
-			notify(error, 'red')
+			notify({ message: error, color: 'red' })
 		}
 	}
 
@@ -62,15 +62,15 @@ const LoginForm = ({
 	)}
 
 LoginForm.propTypes = {
-	notify: PropTypes.func.isRequired,
 	setUser: PropTypes.func.isRequired,
+	notify: PropTypes.func.isRequired,
 }
 
 const BlogForm = ({
 	updateBlogs,
 	blogs,
 	handleLogout,
-	notify,
+	notify
 }) => {
 	const [title, setTitle] = useState('')
 	const [author, setAuthor] = useState('')
@@ -90,10 +90,11 @@ const BlogForm = ({
 			setTitle('')
 			setAuthor('')
 			setUrl('')
-			notify(`a new blog ${createdBlog.title} by ${createdBlog.author} added`, 'green')
+			const msg = `a new blog ${createdBlog.title} by ${createdBlog.author} added`
+			notify({ message: msg, color: 'green' })
 		} catch (exception) {
 			const error = exception.response.data.error
-			notify(error, 'red')
+			notify({ message: error, color: 'red' })
 			if (error === 'token expired') {
 				handleLogout()
 			}

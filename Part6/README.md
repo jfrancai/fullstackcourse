@@ -182,14 +182,6 @@ This way you are able to update the store or get an access to it
 
 ## B) Many reducers
 
-### Redux Toolkit
-
-```bash
-npm install @reduxjs/toolkit
-```
-
-This package helps with the creation of complex redux store that can handle multiple reducers.
-
 ### Combined reducers
 
 We can create the actual reducer for our application by combining the two existing reducers with the `combineReducers` functions
