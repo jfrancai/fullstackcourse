@@ -3,13 +3,14 @@ import blogService from '../services/blogs'
 import loginService from '../services/login'
 import PropTypes from 'prop-types'
 import { notify } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 const LoginForm = ({
 	setUser,
 }) => {
-
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const dispatch = useDispatch()
 
 	const handleLogin = async (event) => {
 		event.preventDefault()
@@ -28,7 +29,7 @@ const LoginForm = ({
 			setPassword('')
 		} catch (exception) {
 			const error = exception.response.data.error
-			notify(error, 'red')
+			dispatch(notify(error, 'red'))
 		}
 	}
 
@@ -73,6 +74,7 @@ const BlogForm = ({
 	const [title, setTitle] = useState('')
 	const [author, setAuthor] = useState('')
 	const [url, setUrl] = useState('')
+	const dispatch = useDispatch()
 
 	const addBlog = async (event) => {
 		event.preventDefault()
@@ -89,10 +91,10 @@ const BlogForm = ({
 			setAuthor('')
 			setUrl('')
 			const msg = `a new blog ${createdBlog.title} by ${createdBlog.author} added`
-			notify(msg, 'green')
+			dispatch(notify(msg, 'green'))
 		} catch (exception) {
 			const error = exception.response.data.error
-			notify(error, 'red')
+			dispatch(notify(error, 'red'))
 			if (error === 'token expired') {
 				handleLogout()
 			}
