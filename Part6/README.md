@@ -16,9 +16,28 @@ Flux offers a standard way for how and where the application's state is kept and
 
 Flux but simplier.
 
+Flux architecture : 
+
+When an action changes the state of the sotre, the views are rerendered:
+
+action -> dispatcher -> sotre -> view
+
+If some action on the application, for example pushing a button, causes the need to change the state, the change is made with an action. This causes re-rendering the view again:
+
+                --------------------
+               ↓                    |
+action -> dispatcher -> store -> view
+
+
 The whole state of the application is stored in one JS object in the store.
 
 The state of the store is changed with actions. Actions are objects, which have at least a field determining the type of the action.
+
+```bash
+npm install redux
+```
+
+We create some action like `INCREMENT` inside a Reducer which will manage the state in the redux store
 
 ```js
 import React from 'react'
@@ -135,6 +154,31 @@ describe('noteReducer', () => {
 
 ### Controlled vs un Uncontrolled React component
 
+When the state of a component is not bounded to the state of the app component
+
+### Action Creator
+
+It's like helper function that handle the call to the store reducer. It allows to abstract the store management away from the frontend logic. Functions that create actions are called action creators.
+
+### Forwarding Redux Store to various components
+
+The question is : How can the App acces the store after moving Redux logic into its own files ? 
+
+One way of doing that is to call hooks Redux API of the react-redux library
+
+```bash
+npm install react-redux
+```
+
+We can now call the `<Provider store={store}>` component around the `<App/>` component so that it can access the `store` param
+
+Moreover, we can import `{ useSelector, useDispatch }` hooks from this library
+
+- useDispatch can be called with an action creator to update the store state you are interested in
+
+- useSelector allows you to choose which sub-store of the global store you are interested in so you can access it
+
+This way you are able to update the store or get an access to it
 
 ## B) Many reducers
 
