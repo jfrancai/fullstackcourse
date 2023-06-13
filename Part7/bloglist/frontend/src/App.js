@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import { LoginForm, BlogForm } from './components/Form'
 import Notification from './components/Notification'
 import Togglable from './components/Toggable'
-import { setNotification, unsetNotification } from './reducers/notificationReducer'
 import blogService from './services/blogs'
 
 
 const App = () => {
 	const [blogs, setBlogs] = useState([])
 	const [user, setUser] = useState(null)
-	const dispatch = useDispatch()
 
 	useEffect(() => {
 		blogService.getAll().then(blogs =>
@@ -28,13 +25,6 @@ const App = () => {
 		}
 	}, [])
 
-	const notify = (notification) => {
-		dispatch(setNotification(notification))
-		setTimeout(() => {
-			dispatch(unsetNotification({ message: null, color: null }))
-		}, 3000)
-	}
-
 	const handleLogout = () => {
 		window.localStorage.removeItem('loggedBlogappUser')
 		setUser(null)
@@ -42,7 +32,6 @@ const App = () => {
 
 	const loginForm = () => < LoginForm
 		setUser={ setUser }
-		notify={notify}
 	/>
 
 	const likeBlog = blog => async () => {
@@ -68,7 +57,6 @@ const App = () => {
 						updateBlogs={setBlogs}
 						blogs={blogs}
 						handleLogout={handleLogout}
-						notify={notify}
 					/>
 				</Togglable>
 				<br/>

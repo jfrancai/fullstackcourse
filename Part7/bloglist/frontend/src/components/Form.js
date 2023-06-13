@@ -2,10 +2,10 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
 import PropTypes from 'prop-types'
+import { notify } from '../reducers/notificationReducer'
 
 const LoginForm = ({
 	setUser,
-	notify
 }) => {
 
 	const [username, setUsername] = useState('')
@@ -28,7 +28,7 @@ const LoginForm = ({
 			setPassword('')
 		} catch (exception) {
 			const error = exception.response.data.error
-			notify({ message: error, color: 'red' })
+			notify(error, 'red')
 		}
 	}
 
@@ -62,15 +62,13 @@ const LoginForm = ({
 	)}
 
 LoginForm.propTypes = {
-	setUser: PropTypes.func.isRequired,
-	notify: PropTypes.func.isRequired,
+	setUser: PropTypes.func.isRequired
 }
 
 const BlogForm = ({
 	updateBlogs,
 	blogs,
-	handleLogout,
-	notify
+	handleLogout
 }) => {
 	const [title, setTitle] = useState('')
 	const [author, setAuthor] = useState('')
@@ -91,10 +89,10 @@ const BlogForm = ({
 			setAuthor('')
 			setUrl('')
 			const msg = `a new blog ${createdBlog.title} by ${createdBlog.author} added`
-			notify({ message: msg, color: 'green' })
+			notify(msg, 'green')
 		} catch (exception) {
 			const error = exception.response.data.error
-			notify({ message: error, color: 'red' })
+			notify(error, 'red')
 			if (error === 'token expired') {
 				handleLogout()
 			}

@@ -17,3 +17,12 @@ const notificationSlice = createSlice({
 
 export const { setNotification, unsetNotification } = notificationSlice.actions
 export default notificationSlice.reducer
+
+export const notify = (message, color) => {
+	return () => {
+		setNotification({ message, color })
+		setTimeout(() => {
+			unsetNotification({ message: null, color: null })
+		})
+	}
+}
