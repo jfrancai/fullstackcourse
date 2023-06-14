@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogServices from '../services/blogs'
 import { notify } from './notificationReducer'
+import { handleLogout } from './userReducer'
 
 const blogSlice = createSlice({
 	name: 'blog',
@@ -34,7 +35,7 @@ export const initBlogs = () => {
 	}
 }
 
-export const createBlog = (blog, handleLogout, clearFields) => {
+export const createBlog = (blog, clearFields) => {
 	return async dispatch => {
 		try {
 			const createdBlog = await blogServices.create(blog)
@@ -48,7 +49,7 @@ export const createBlog = (blog, handleLogout, clearFields) => {
 			const error = exception.response.data.error
 			dispatch(notify(error, 'red'))
 			if (error === 'token expired') {
-				handleLogout()
+				dispatch(handleLogout())
 			}
 		}
 	}

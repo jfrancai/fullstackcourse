@@ -47,9 +47,7 @@ const LoginForm = () => {
 		</div>
 	)}
 
-const BlogForm = ({
-	handleLogout
-}) => {
+const BlogForm = () => {
 	const [title, setTitle] = useState('')
 	const [author, setAuthor] = useState('')
 	const [url, setUrl] = useState('')
@@ -65,7 +63,7 @@ const BlogForm = ({
 		event.preventDefault()
 
 		const blog = { title, author, url }
-		dispatch(createBlog(blog, handleLogout, clearFields))
+		dispatch(createBlog(blog, clearFields))
 	}
 
 	return (
