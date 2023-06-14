@@ -6,20 +6,13 @@ import Notification from './components/Notification'
 import { initBlogs } from './reducers/blogReducer'
 import { addUser } from './reducers/userReducer'
 import { handleLogout } from './reducers/userReducer'
-import { BrowserRouter as Router,  Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router,  Routes, Route, Link, useParams } from 'react-router-dom'
 import usersServices from './services/users.js'
 
-const Users = () => {
-	const [users, setUsers] = useState(null)
-
-	useEffect(() => {
-		usersServices.getAll().then(response => setUsers(response)).catch(error => console.log(error))
-	}, [setUsers])
-
+const Users = ({ users }) => {
 	if (users === null) {
 		return null
 	}
-	console.log(users)
 
 	return (
 		<div>
@@ -37,7 +30,7 @@ const Users = () => {
 					{users.map(user => {
 						return (
 							<tr key={user.id}>
-								<td><Link to="/">{user.name}</Link></td>
+								<td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
 								<td>{user.blogs.length}</td>
 							</tr>
 						)
@@ -48,9 +41,37 @@ const Users = () => {
 	)
 }
 
+const User = ({ users }) => {
+	if (users === null) {
+		return null
+	}
+	const id = useParams().id
+	const user = users.find(u => u.id === id)
+	return (
+		<div>
+			<h2>{user.name}</h2>
+			<h3>added blogs</h3>
+			<ul>
+				{user.blogs.map(b => {
+					return (
+						<li key={b.id}>{b.title}</li>
+					)
+				})}
+			</ul>
+		</div>
+	)
+}
+
 const Home = () => {
-	const user = useSelector(state => state.user)
+	const [users, setUsers] = useState(null)
 	const dispatch = useDispatch()
+	const user = useSelector(state => state.user)
+
+	useEffect(() => {
+		usersServices.getAll().then(response => setUsers(response)).catch(error => console.log(error))
+	}, [setUsers])
+
+
 	if (user === null) {
 		return null
 	}
@@ -59,7 +80,8 @@ const Home = () => {
 			<h2>blogs</h2>
 			<p>{user.username} logged in <button onClick={() => dispatch(handleLogout())} >log out</button></p>
 			<Routes>
-				<Route path='/users' element={<Users/>}/>
+				<Route path='/users/:id' element={<User users={users}/>}/>
+				<Route path='/users' element={<Users users={users}/>}/>
 				<Route path='/' element={<BlogList />}/>
 			</Routes>
 		</Router>
