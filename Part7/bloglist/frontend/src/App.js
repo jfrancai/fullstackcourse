@@ -4,7 +4,7 @@ import { LoginForm } from './components/Form'
 import BlogList from './components/BlogList'
 import Notification from './components/Notification'
 import { initBlogs } from './reducers/blogReducer'
-import { addUser, setUser } from './reducers/userReducer'
+import { addUser } from './reducers/userReducer'
 
 const App = () => {
 	const dispatch = useDispatch()
@@ -18,8 +18,7 @@ const App = () => {
 		dispatch(addUser())
 	}, [])
 
-	const loginForm = () => < LoginForm setUser={ (user) => dispatch(setUser(user)) } />
-
+	const loginForm = () => < LoginForm />
 	const blogsList = () => <BlogList />
 
 	return (
