@@ -1,7 +1,7 @@
 import Togglable from './Toggable'
-import Blog from './Blog'
 import { useSelector } from 'react-redux'
 import { BlogForm } from './Form'
+import { Link } from 'react-router-dom'
 
 const BlogList = () => {
 	const blogs = useSelector(state => state.blogs)
@@ -16,7 +16,17 @@ const BlogList = () => {
 			</Togglable>
 			<br/>
 			<div>
-				{sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} />) }
+				<ul>
+					{sortedBlogs.map(blog => {
+						return (
+							<Link key={blog.id} to={`/blogs/${blog.id}`}>
+								<li>
+									{blog.title}
+								</li>
+							</Link>
+						)}
+					)}
+				</ul>
 			</div>
 		</div>
 	)

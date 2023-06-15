@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { LoginForm } from './components/Form'
 import BlogList from './components/BlogList'
 import Notification from './components/Notification'
+import Blog from './components/Blog'
 import { initBlogs } from './reducers/blogReducer'
 import { addUser } from './reducers/userReducer'
 import { handleLogout } from './reducers/userReducer'
@@ -80,6 +81,7 @@ const Home = () => {
 			<h2>blogs</h2>
 			<p>{user.username} logged in <button onClick={() => dispatch(handleLogout())} >log out</button></p>
 			<Routes>
+				<Route path='/blogs/:id' element={<Blog />}/>
 				<Route path='/users/:id' element={<User users={users}/>}/>
 				<Route path='/users' element={<Users users={users}/>}/>
 				<Route path='/' element={<BlogList />}/>

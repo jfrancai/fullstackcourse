@@ -40,6 +40,7 @@ export const createBlog = (blog, clearFields) => {
 		try {
 			const createdBlog = await blogServices.create(blog)
 			dispatch(appendBlog(createdBlog))
+			dispatch(initBlogs())
 			dispatch(notify(
 				`a new blog ${createdBlog.title} by ${createdBlog.author} added`
 				, 'green'
