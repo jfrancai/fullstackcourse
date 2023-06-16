@@ -10,14 +10,7 @@ const onFinishFailed = (errorInfo) => {
 }
 
 const LoginForm = () => {
-	//const [username, setUsername] = useState('')
-	//const [password, setPassword] = useState('')
 	const dispatch = useDispatch()
-
-	//const resetFields = () => {
-	//	setUsername('')
-	//	setPassword('')
-	//}
 
 	const onFinish = async ({ username, password }) => {
 		dispatch(handleLogin({ username, password }))
