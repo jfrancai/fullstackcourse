@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { createBlog } from '../reducers/blogReducer'
+import { createBlog, initBlogs } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { handleLogin } from '../reducers/userReducer'
+import blogServices from '../services/blogs'
 
 const LoginForm = () => {
 	const [username, setUsername] = useState('')
@@ -46,6 +47,40 @@ const LoginForm = () => {
 			</form>
 		</div>
 	)}
+
+const CommentForm = ({ blogId }) => {
+	const [comment, setComment] = useState('')
+	const dispatch = useDispatch()
+
+	const addComment = async (event) => {
+		event.preventDefault()
+		const blogComment = {
+			comment,
+			blogId
+		}
+		await blogServices.comment(blogComment)
+		dispatch(initBlogs())
+		setComment('')
+	}
+
+	return (
+		<div>
+			<form onSubmit={addComment}>
+				<div>
+					Add comment
+					<input
+						id='comment'
+						type='text'
+						value={comment}
+						name='Comment'
+						onChange={({ target }) => setComment(target.value)}
+					/>
+				</div>
+				<button id='create-comment' type='submit'>add</button>
+			</form>
+		</div>
+	)
+}
 
 const BlogForm = () => {
 	const [title, setTitle] = useState('')
@@ -105,4 +140,4 @@ const BlogForm = () => {
 		</div>
 	)}
 
-export { LoginForm, BlogForm }
+export { LoginForm, BlogForm, CommentForm }

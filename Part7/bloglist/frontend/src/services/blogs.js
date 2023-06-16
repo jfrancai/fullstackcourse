@@ -37,5 +37,13 @@ const remove = async (id) => {
 	return response.data
 }
 
+const comment = async newComment => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const response = await axios.post(`${baseUrl}/${newComment.blogId}/comments`, newComment, config)
+	return response.data
+}
+
 // eslint-disable-next-line
-export default { getAll, create, update, remove, setToken }
+export default { getAll, create, update, remove, setToken, comment }
