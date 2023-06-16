@@ -39,7 +39,7 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
 	response.status(204).end()
 })
 
-blogRouter.put('/:id', async (request, response) => {
+blogRouter.put('/:id', middleware.userExtractor, async (request, response) => {
 	const updatedBlog = await Blog.findByIdAndUpdate(
 		request.params.id,
 		{$inc: { likes: 1 } },

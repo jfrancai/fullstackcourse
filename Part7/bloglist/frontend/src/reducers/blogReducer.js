@@ -30,8 +30,16 @@ export default blogSlice.reducer
 
 export const initBlogs = () => {
 	return async dispatch => {
-		const blogs = await blogServices.getAll()
-		dispatch(setBlogs(blogs))
+		try {
+			const blogs = await blogServices.getAll()
+			dispatch(setBlogs(blogs))
+		} catch (exception) {
+			const error = exception.response.data.error
+			if (error === 'token expired') {
+				dispatch(handleLogout())
+			}
+			dispatch(notify(error, 'red'))
+		}
 	}
 }
 
@@ -48,10 +56,10 @@ export const createBlog = (blog, clearFields) => {
 			clearFields()
 		} catch (exception) {
 			const error = exception.response.data.error
-			dispatch(notify(error, 'red'))
 			if (error === 'token expired') {
 				dispatch(handleLogout())
 			}
+			dispatch(notify(error, 'red'))
 		}
 	}
 }
@@ -62,7 +70,11 @@ export const removeBlog = (id) => {
 			await blogServices.remove(id)
 			dispatch(delBlog(id))
 		} catch (exception) {
-			console.log(exception.response.data.error)
+			const error = exception.response.data.error
+			if (error === 'token expired') {
+				dispatch(handleLogout())
+			}
+			dispatch(notify(error, 'red'))
 		}
 	}
 }
@@ -73,7 +85,11 @@ export const like = (id) => {
 			await blogServices.update(id)
 			dispatch(likeBlog(id))
 		} catch (exception) {
-			console.log(exception.response.data.error)
+			const error = exception.response.data.error
+			if (error === 'token expired') {
+				dispatch(handleLogout())
+			}
+			dispatch(notify(error, 'red'))
 		}
 	}
 }

@@ -79,12 +79,17 @@ const Home = () => {
 	return (
 		<Router>
 			<h2>blogs</h2>
-			<p>{user.username} logged in <button onClick={() => dispatch(handleLogout())} >log out</button></p>
+			<div>
+				<Link to='/blogs'>blogs</Link>
+				<Link to='/users'>users</Link>
+				{user.username} logged in <button onClick={() => dispatch(handleLogout())} >log out</button>
+			</div>
 			<Routes>
 				<Route path='/blogs/:id' element={<Blog />}/>
 				<Route path='/users/:id' element={<User users={users}/>}/>
 				<Route path='/users' element={<Users users={users}/>}/>
 				<Route path='/' element={<BlogList />}/>
+				<Route path='/blogs' element={<BlogList />}/>
 			</Routes>
 		</Router>
 	)
