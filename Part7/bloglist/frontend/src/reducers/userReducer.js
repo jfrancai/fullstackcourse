@@ -39,7 +39,7 @@ export const handleLogout = () => {
 	}
 }
 
-export const handleLogin = (user, resetFields) => {
+export const handleLogin = (user) => {
 	return async dispatch => {
 		try {
 			const loggedUser = await loginService.login(user)
@@ -48,7 +48,6 @@ export const handleLogin = (user, resetFields) => {
 			)
 			blogService.setToken(loggedUser.token)
 			dispatch(setUser(loggedUser))
-			resetFields()
 		} catch (exception) {
 			const error = exception.response.data.error
 			dispatch(notify(error, 'red'))

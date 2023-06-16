@@ -2,50 +2,80 @@ import { useState } from 'react'
 import { createBlog, initBlogs } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { handleLogin } from '../reducers/userReducer'
+import { Button, Form, Input } from 'antd'
 import blogServices from '../services/blogs'
 
+const onFinishFailed = (errorInfo) => {
+	console.log('Failed', errorInfo)
+}
+
 const LoginForm = () => {
-	const [username, setUsername] = useState('')
-	const [password, setPassword] = useState('')
+	//const [username, setUsername] = useState('')
+	//const [password, setPassword] = useState('')
 	const dispatch = useDispatch()
 
-	const resetFields = () => {
-		setUsername('')
-		setPassword('')
-	}
+	//const resetFields = () => {
+	//	setUsername('')
+	//	setPassword('')
+	//}
 
-	const login = async (event) => {
-		event.preventDefault()
-		dispatch(handleLogin({ username, password }, resetFields))
+	const onFinish = async ({ username, password }) => {
+		dispatch(handleLogin({ username, password }))
 	}
 
 	return (
-		<div>
-			<h2>log in to application</h2>
-			<form onSubmit={login}>
-				<div>
-					username
-					<input
-						id="username"
-						type='text'
-						value={username}
-						name='Username'
-						onChange={({ target }) => setUsername(target.value)}
-					/>
-				</div>
-				<div>
-					password
-					<input
-						id='password'
-						type='password'
-						value={password}
-						name='Password'
-						onChange={({ target }) => setPassword(target.value)}
-					/>
-				</div>
-				<button id='login-button' type='submig'>login</button>
-			</form>
-		</div>
+		<Form
+			name="basic"
+			labelCol={{
+				span: 8,
+			}}
+			wrapperCol={{
+				span: 16,
+			}}
+			style={{
+				maxWidth: 600,
+			}}
+			onFinish={onFinish}
+			onFinishFailed={onFinishFailed}
+			autoComplete="off"
+		>
+			<Form.Item
+				label="Username"
+				name="username"
+				rules={[
+					{
+						required: true,
+						message: 'Please input your username!',
+					},
+				]}
+			>
+				<Input />
+			</Form.Item>
+
+			<Form.Item
+				label="Password"
+				name="password"
+				rules={[
+					{
+						required: true,
+						message: 'Please input your password!',
+					},
+				]}
+			>
+				<Input.Password />
+			</Form.Item>
+
+			<Form.Item
+				wrapperCol={{
+					offset: 8,
+					span: 16,
+				}}
+			>
+				<Button type="primary" htmlType="submit">
+			Submit
+				</Button>
+			</Form.Item>
+		</Form>
 	)}
 
 const CommentForm = ({ blogId }) => {
