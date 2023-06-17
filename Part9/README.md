@@ -68,10 +68,40 @@ tsconfig.json
 }
 ```
 
+### Creating your first own types
+
+We can create a type using the TypeScript native keyword `type` :
+
+```ts
+type Operation = 'multiply' | 'add' | 'divide';
+```
+
+This type only accept three type of values. We call it a `union type`
+
+This one is built from string litteral types.
+
+It now defines a type aliase
+
+Use `interface` keyword to describe the shape an object should have
+
+### Type narrowing
+
+One way to type narrowing is to use `instanceof` keyword
+
+There are many others
+
+### @types/{npm_package}
+
+usually, types for existing packages can be found fromthe @types organization within npm an you can add the relevant types to your project by installing an npm package with the name of your package with a @types/ prefix
+
+Note: Since the typings are only used before compilation, the typings are
+t needed in the production build and they should always be in the devDependcies of the package.json
 
 
+### The alternative array syntax
 
+```ts
+let values: number[];
 
-
-
-
+let values: Array<number>;
+```
