@@ -162,3 +162,40 @@ Starting with ECMAScript 2015, JS has a concept of modules. TS shares this conce
 Modules are executed within their own scope, not in the global scope; this means that varibles, functions, classes, etc. declared in a module are not visible outside the module unless they are explicitly exported using one of the export forms. Conversely, to consume a variable, function, class, interface, etc. exported from a different module, it has to be imported using one of the import forms.
 
 note: you can use underscore to get rid of warning for unused variable
+
+We can install hot-reload server like nodemon for ts-node application
+
+```bash
+npm install --save-dev ts-node-dev
+```
+
+### The horros of any
+
+Now that we have our first endpoints completed, you might notice we have used barely any TypeScript in these small examples. When examining the code a bit closer, we can see a few dangers lurking there.
+
+In TypeScript, every untyped variable whose type cannot be inferred implicitly becomes type any. Any is a kind of "wild card" type which stands for whatever type. Thins become implicitly any type quite often when one forgets to type functions.
+
+There are other methods than tsconfig.json to enforce a coding style. What we can do is use Eslint to manage our code. Let's install Eslint and its TypeScript Extensions.
+
+```bash
+npm install --save-dev eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser
+```
+
+So now we can configure eslint to disallow explicit any. Write the following rules to .eslintrc
+
+```json
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+
+    "@typescript-eslint/no-explicit-any": 2
+  }
+}
+```
+
+## C) Typing an Express app
