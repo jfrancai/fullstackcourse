@@ -142,4 +142,23 @@ This is actually not quite true, This rule applies only to files that are treate
 }
 ```
 
-(docs here)[https://www.typescriptlang.org/tsconfig]
+[docs here](https://www.typescriptlang.org/tsconfig)
+
+### Adding Express to the mix
+
+
+```bash
+npm install express
+```
+
+```bash
+npm install --save-dev @types/express
+```
+
+### TS Modules
+
+Starting with ECMAScript 2015, JS has a concept of modules. TS shares this concept.
+
+Modules are executed within their own scope, not in the global scope; this means that varibles, functions, classes, etc. declared in a module are not visible outside the module unless they are explicitly exported using one of the export forms. Conversely, to consume a variable, function, class, interface, etc. exported from a different module, it has to be imported using one of the import forms.
+
+note: you can use underscore to get rid of warning for unused variable
