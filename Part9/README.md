@@ -198,4 +198,158 @@ So now we can configure eslint to disallow explicit any. Write the following rul
 }
 ```
 
-## C) Typing an Express app
+## C) Typing an Express app (actual guide to start up a ts project)
+
+One major change from the prvious part is that we're not going to use ts-node anymore. It is a handy tool that helps you get started, but in the long run, it is advisable to use th eofficial TypeScript compiler that comes with the typescript npm-package.
+
+The official compiler generates and packages JavaScript files from the .ts files so that the built production versionwon't contain any TypeScript code anymor. This is the exact outcome we are aiming for since TypeScipt itself is not executable by browsers or Node.
+
+### Setting up the project
+
+```bash
+npm install typescript --save-dev
+```
+
+Then we can add script to use tsc compiler:
+
+```json
+{
+  // ..
+  "scripts": {
+
+    "tsc": "tsc"
+  },
+  // ..
+}
+```
+
+and run it with `npm run tsc -- --init`
+
+note: remember that `--` is nmp way to pass params to the program (here tsc)
+
+here is the example tsconfig.json we are using
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "outDir": "./build/",
+    "module": "commonjs",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true
+  }
+}
+```
+
+-> `target` configuration tells the compiler which ECMAScript version to use when genrating JS.
+-> `outDir` tells where the compiled code should be placed.
+-> `module` tells the compiler that we want to use CommonJS modules in the compiled code. This means we can use the old require syntax instead of the import one, which not supported in older version of Node, such as version 10.
+-> `strict` is a shorthand for multiple separated options: noImplicitAny, noImplicitThis, alwaysStrict, strictBindCallAppply, strictNullChecks, strictFunctionTypes and strictPropertyInitialization. Using strict is suggested by the officail documentation.
+-> `noUnusedLocals` prevent having unused local variables
+-> `noUnusedParameters` throws an error if a function has unused parameters.
+-> `noImplicitReturns` checks all code paths in a function to ensure they return a value.
+-> `noFallthroughCasesInSwitch` ensures that, in a switch case, each case ends either with a return or a break statement.
+-> `esModuleInterop` allows interoperability between CommonJS and ES Modules; see more in the documentation
+
+deps installation
+ 
+```bash
+npm install express
+npm install --save-dev eslint @types/express @typescript-eslint/eslint-plugin @typescript-eslint/parser
+```
+
+package.json
+
+```json
+{
+  "name": "flight_diary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc"
+  },
+  "author": "Jane Doe",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
+    "eslint": "^8.9.0",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
+```
+
+eslintrc
+
+```json
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "@typescript-eslint/semi": ["error"],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_" }
+    ],
+    "no-case-declarations": "off"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}
+```
+
+dev server
+
+```bash
+npm install --save-dev ts-node-dev
+```
+
+and some usefull script
+
+```json
+{
+  // ...
+  "scripts": {
+    "tsc": "tsc",
+
+    "dev": "ts-node-dev index.ts",
+    "lint": "eslint --ext .ts ."
+  },
+  // ...
+}
+```
+
+### Let there be code
+
+We can create a basic ping application using express and test it with `npm run dev`
+
+Now if we want to build the project run `npm run tsc`
+
+Now eslint will also interpret the files in the build folder, we can prevent that with .eslintignore file or add --ext .ts option
+
+This is how to set up a minimal pipeline. 
