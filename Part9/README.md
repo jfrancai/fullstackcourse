@@ -55,9 +55,15 @@ We install globaly ts-node and official typescript packages:
 npm install -g ts-node typescript
 ```
 
+* typescript is the official TS compiler
+
+* ts-node is TypeScript execution engine for Node.js. It allows you to run your TypeScript code directly without precompiling your TypeScript code to JavaScript. ts-node transforms TypeScript to JavaScript in-memory without writing it to disk.
+
+
 ### Setting things up
 
 tsconfig.json
+
 ```json
 {
     {
@@ -84,6 +90,13 @@ It now defines a type aliase
 
 Use `interface` keyword to describe the shape an object should have
 
+```ts
+interface Point {
+    x: number;
+    y: number;
+}
+```
+
 ### Type narrowing
 
 One way to type narrowing is to use `instanceof` keyword
@@ -105,3 +118,28 @@ let values: number[];
 
 let values: Array<number>;
 ```
+
+### Another note
+
+somehow surprinsingly TypeScript does not allow to define the same variable in many files at a "block-scope", that is, outside functions (or classes)
+This is actually not quite true, This rule applies only to files that are treated as "scripts". A file is a scipt if ti does not contain any export or import statements. If a file has those., Then the file is treated as a module, and the variables do not get defined in the block-scope.
+
+### More about tsconfig
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  }
+}
+```
+
+(docs here)[https://www.typescriptlang.org/tsconfig]
