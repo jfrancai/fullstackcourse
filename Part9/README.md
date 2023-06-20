@@ -388,3 +388,15 @@ const getNonSensitiveEntries =
     // ...
   }
 ```
+
+### Preventing an accidental undefined result
+
+- use `undefined` type its any but you can't use it so prevents you from messing up
+- use type guarded functions. That means it is a functino that returns a boolean and has a type predicate as the return type. The general form of a type predicate is `parameterName` is `Type` where the `parameterName` is the name of the function parameter and `Type` is the targeted type.
+
+```ts
+const isString = (text: unknown): text is string => {
+  return typeof text === 'string' || text instanceof String;
+};
+```
+
