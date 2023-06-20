@@ -353,3 +353,26 @@ Now if we want to build the project run `npm run tsc`
 Now eslint will also interpret the files in the build folder, we can prevent that with .eslintignore file or add --ext .ts option
 
 This is how to set up a minimal pipeline. 
+
+### Implement the functionality
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "outDir": "./build/",
+    "module": "commonjs",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+
+    "resolveJsonModule": true
+  }
+}
+```
+
+`resolveJsonModule` enable importing .json files.
+
