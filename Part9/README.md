@@ -376,3 +376,15 @@ This is how to set up a minimal pipeline.
 
 `resolveJsonModule` enable importing .json files.
 
+### Utility Types
+
+Sometimes, we might want to use a specific modificaiton of a type. For example, consider a page for listing some data, some of which is sensitive dan some of which is non-sensitive. We might want to be sure that no sensitive data is used or displayed. We could pick the fields of a type we allow to be used to enfore this. We can do that by suing th utility type `Pick`.
+
+The Pick utility type allows us to choose which fields of an existing type we want to use. Pick can be used to either construct a completely new type or to inform a function what it should return on runtime. Utility types are a special knid of type, but they can be used just like regular types.
+
+```ts
+const getNonSensitiveEntries =
+  (): Pick<DiaryEntry, 'id' | 'date' | 'weather' | 'visibility'>[] => {
+    // ...
+  }
+```
