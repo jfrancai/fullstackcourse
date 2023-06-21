@@ -408,3 +408,55 @@ You can create unique ids of type string using the `uuid` library
 import { v1 as uuid } from 'uuid'
 const id = uuid()
 ```
+
+## D) React with types
+
+TypeScript will help us catch the following errors:
+
+* Trying to pass an exta/unwanted prop to a component
+
+* Forgetting to pass a required prop to a component
+
+* Passing a prop with the wrong type to a component
+
+If we make any of these errors, TypeScript can help us catch them in our editor right away.
+
+### Create React App with TypeScript
+
+```bash
+npx create-react-app my-app --template typescript
+```
+
+Then, you can start the dev server with `npm start` and look at the tsconfig.json that has been created.
+
+note: turn off `allowJs` option if you want to do a full TS application without JS at all.
+
+Finally we can configure ESlint in .eslintrc file:
+
+```json
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["react", "@typescript-eslint"],
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "react/react-in-jsx-scope": 0
+  }
+}
+```
+
