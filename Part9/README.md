@@ -400,3 +400,11 @@ const isString = (text: unknown): text is string => {
 };
 ```
 
+### UUID
+
+You can create unique ids of type string using the `uuid` library
+
+```ts
+import { v1 as uuid } from 'uuid'
+const id = uuid()
+```

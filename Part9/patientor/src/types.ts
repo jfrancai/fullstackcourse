@@ -2,7 +2,7 @@ export interface DiagnoseEntry {
 	code: string,
 	name: string,
 	latin?: string
-}
+};
 
 export interface PatientEntry {
 	id: string,
@@ -11,6 +11,8 @@ export interface PatientEntry {
 	ssn: string,
 	gender: string,
 	occupation: string
-}
+};
 
-export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>
+export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
+
+export type NewPatientEntry = Omit<PatientEntry, 'id'>;

@@ -10,6 +10,6 @@ const getEntries = (): DiagnoseEntry[] => {
 	}));
 };
 
-export {
+export default {
 	getEntries
 }
