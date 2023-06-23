@@ -511,7 +511,7 @@ const courseParts: CoursePart[] = [
     description: "Confusing description",
     backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
     kind: "background"
-  },
+  }
   {
     name: "TypeScript in frontend",
     exerciseCount: 10,
@@ -520,3 +520,53 @@ const courseParts: CoursePart[] = [
   },
 ];
 ```
+
+### React app with state
+
+```js
+import { useState } from 'react';
+
+const App = () => {
+  const [newNote, setNewNote] = useState('');
+  const [notes, setNotes] = useState([]);
+
+  return null
+}
+```
+
+```ts
+import { useState } from 'react';
+
+const App = () => {
+  const [newNote, setNewNote] = useState('');
+  const [notes, setNotes] = useState<Note[]>([]);
+
+  return null
+}
+```
+
+ So in technical terms useState is gaeric function, where the type has to be specified as a type parameter in thos cases when the compiler can not infer the type.
+
+ For any help we can use the React typescrpit [cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
+
+### Communicating with the server
+
+So, how to use axios in you TypeScript Apps?
+
+axios also use type generic:
+
+```ts
+useEffect(() => {
+axios.get<Note[]>('http://localhost:3001/notes').then(response => {
+
+  setNotes(response.data)
+})
+}, [])
+```
+
+but this is unsafe method since we basically say typescript to trust the fact that the response is of a certain type.
+
+### A note about defining object types
+
+In most cases, you can use either type of interface, whichever you prefer.
+However, there are a few things to keep in mind. For example, if you define multiple interfaces with the same name, they will result in a merged interface, whereas if you try to define mutliple types with the same name, it will result in an error stating that a type with the same name is already declared.
