@@ -54,6 +54,7 @@ const Part = (props: PartProps): JSX.Element => {
 		case "basic":
 			return (
 				<div>
+          <br/>
 					<b>{props.part.name} {props.part.exerciseCount}</b><br/>
 					{props.part.description}
 				</div>
@@ -61,6 +62,7 @@ const Part = (props: PartProps): JSX.Element => {
 		case "group":
 			return (
 				<div>
+          <br/>
 					<b>{props.part.name} {props.part.exerciseCount}</b><br/>
 					Group project count: {props.part.groupProjectCount}
 				</div>
@@ -68,6 +70,7 @@ const Part = (props: PartProps): JSX.Element => {
 		case "background":
 			return (
 				<div>
+          <br/>
 					<b>{props.part.name} {props.part.exerciseCount}</b><br/>
 					Background Material: {props.part.backgroundMaterial}
 				</div>
@@ -75,8 +78,9 @@ const Part = (props: PartProps): JSX.Element => {
 		case "special":
 			return (
 				<div>
+          <br/>
 					<b>{props.part.name} {props.part.exerciseCount}</b><br/>
-					Description: {props.part.description}<br/>Required skills: {props.part.requirements.join(', ')}
+					{props.part.description}<br/>Required skills: {props.part.requirements.join(', ')}
 				</div>
 			)
 	}
