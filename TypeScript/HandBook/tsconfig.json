@@ -1,0 +1,6 @@
+{
+  "CompilerOptions": {
+    "target": "es2020",
+    "strict": true
+  }
+}
