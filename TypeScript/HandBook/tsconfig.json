@@ -1,6 +1,6 @@
 {
   "CompilerOptions": {
-    "target": "es2020",
+    "target": "esnext",
     "strict": true
   }
 }
